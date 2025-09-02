@@ -22,6 +22,7 @@ It is fully **responsive** and works on both **desktop and mobile**.
 
 
 ➕ Add School
+<img width="1878" height="872" alt="image" src="https://github.com/user-attachments/assets/9a5f482c-b90f-46c0-a2f9-5efed168e5cc" />
 
 
 📚 Show Schools
