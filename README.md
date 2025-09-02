@@ -115,6 +115,3 @@ npm run dev
 
 * Suchindhar RM
 * GitHub: [Suchindhar](https://github.com/suchindhar)
-
-Do you want me to also **create the screenshot placeholders folder (`/screenshots`) with example Markdown image links** so you can just drop your images in?
-```
