@@ -20,6 +20,8 @@ It is fully **responsive** and works on both **desktop and mobile**.
 
 🏠 Home Page
 
+<img width="1905" height="855" alt="image" src="https://github.com/user-attachments/assets/4db3cebd-cc4a-4f14-a3de-13ba41e5ab8c" />
+
 
 ➕ Add School
 <img width="1878" height="872" alt="image" src="https://github.com/user-attachments/assets/9a5f482c-b90f-46c0-a2f9-5efed168e5cc" />
@@ -27,8 +29,9 @@ It is fully **responsive** and works on both **desktop and mobile**.
 
 📚 Show Schools
 
+<img width="1845" height="840" alt="image" src="https://github.com/user-attachments/assets/849b5637-d609-4e0a-86a7-d2aeb5f03e41" />
 
-*(Replace these placeholders with your actual screenshots — take them in browser & mobile view.)*
+
 
 
 🛠️ Tech Stack
