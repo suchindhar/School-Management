@@ -39,37 +39,13 @@ It is fully **responsive** and works on both **desktop and mobile**.
 - **Node.js**
 
 
-📂 Folder Structure
-
-
-school-management/
-├── app/
-│   ├── addSchool/        # Add School page
-│   │   └── page.jsx
-│   ├── showSchools/      # Show Schools page
-│   │   └── page.jsx
-│   ├── api/
-│   │   └── schools/
-│   │       └── route.js  # API routes (CRUD)
-│   └── layout.js
-│
-├── lib/
-│   └── db.js             # Database connection
-│
-├── public/
-│   └── schoolImages/     # Uploaded school images
-│
-├── package.json
-└── README.md
-
-````
 
 
 🗄️ Database Setup
 
 Run the following SQL commands in MySQL:
 
-```sql
+sql
 -- Create database
 CREATE DATABASE IF NOT EXISTS school_db;
 
@@ -94,7 +70,7 @@ CREATE TABLE schools (
   image TEXT,
   email_id TEXT NOT NULL
 );
-````
+
 
 
 ⚙️ Installation & Setup
