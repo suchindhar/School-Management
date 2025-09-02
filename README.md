@@ -1,36 +1,140 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+🎓 School Management System (Next.js + MySQL)
 
-## Getting Started
+A simple **School Management System** built with **Next.js 13 (App Router)**, **React Hook Form**, **MySQL**, and **TailwindCSS**.  
+This project allows users to **Add, View, Edit, and Delete schools**, along with **image upload support**.  
+It is fully **responsive** and works on both **desktop and mobile**.
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+🚀 Features
+
+✅ Add School with validation (React Hook Form)  
+✅ Store school data in MySQL database (`schools` table)  
+✅ Upload and store images in `/public/schoolImages`  
+✅ View list of all schools with responsive cards  
+✅ Edit and Delete school entries  
+✅ Mobile-first, responsive UI with TailwindCSS  
+✅ Modern UI with hover effects & animations  
+
+
+📸 Screenshots
+
+🏠 Home Page
+
+
+➕ Add School
+
+
+📚 Show Schools
+
+
+*(Replace these placeholders with your actual screenshots — take them in browser & mobile view.)*
+
+
+🛠️ Tech Stack
+
+- **Next.js 13 (App Router)**
+- **React Hook Form**
+- **TailwindCSS**
+- **MySQL (mysql2 driver)**
+- **Node.js**
+
+
+📂 Folder Structure
+
+
+school-management/
+├── app/
+│   ├── addSchool/        # Add School page
+│   │   └── page.jsx
+│   ├── showSchools/      # Show Schools page
+│   │   └── page.jsx
+│   ├── api/
+│   │   └── schools/
+│   │       └── route.js  # API routes (CRUD)
+│   └── layout.js
+│
+├── lib/
+│   └── db.js             # Database connection
+│
+├── public/
+│   └── schoolImages/     # Uploaded school images
+│
+├── package.json
+└── README.md
+
+````
+
+
+🗄️ Database Setup
+
+Run the following SQL commands in MySQL:
+
+```sql
+-- Create database
+CREATE DATABASE IF NOT EXISTS school_db;
+
+-- Create a dedicated user
+CREATE USER 'school_app_user'@'localhost' IDENTIFIED BY 'app_password_123';
+
+-- Grant privileges
+GRANT ALL PRIVILEGES ON school_db.* TO 'school_app_user'@'localhost';
+FLUSH PRIVILEGES;
+
+-- Use database
+USE school_db;
+
+-- Create schools table
+CREATE TABLE schools (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name TEXT NOT NULL,
+  address TEXT NOT NULL,
+  city TEXT NOT NULL,
+  state TEXT NOT NULL,
+  contact BIGINT NOT NULL,
+  image TEXT,
+  email_id TEXT NOT NULL
+);
+````
+
+
+⚙️ Installation & Setup
+
+ 1. Clone repo
+
+git clone https://github.com/your-username/school-management.git
+cd school-management
+
+2. Install dependencies
+npm install
+
+
+3. Configure environment variables
+
+Create a `.env.local` file in root:
+
 ```
+DB_HOST=localhost
+DB_USER=school_app_user
+DB_PASSWORD=app_password_123
+DB_NAME=school_db
+```
+4. Run development server
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+npm run dev
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+✨ Future Enhancements
 
-## Learn More
+* 🔍 Add search & filter functionality
+* 📱 Progressive Web App (PWA) support
+* 🗺️ Integrate Google Maps for school location
+* 📊 Dashboard with analytics
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ 👨‍💻 Author
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* Suchindhar RM
+* GitHub: [Suchindhar](https://github.com/suchindhar)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Do you want me to also **create the screenshot placeholders folder (`/screenshots`) with example Markdown image links** so you can just drop your images in?
+```
