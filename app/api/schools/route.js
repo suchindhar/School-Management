@@ -1,17 +1,7 @@
 import { NextResponse } from "next/server";
-import mysql from "mysql2/promise";
+import { connect } from "@/lib/db";
 
-// ✅ Helper: connect to DB
-async function connect() {
-  return mysql.createConnection({
-    host: "localhost",
-    user: "school_app_user",  // use your dedicated user
-    password: "app_password_123",
-    database: "school_db",
-  });
-}
-
-// ------------------ ADD (Create) ------------------
+// ------------------ ADD ------------------
 export async function POST(request) {
   let connection;
   try {
@@ -26,7 +16,6 @@ export async function POST(request) {
     const values = [name, address, city, state, contact, image || null, email_id];
 
     const [result] = await connection.execute(query, values);
-
     return NextResponse.json({ message: "School added", id: result.insertId }, { status: 201 });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -35,7 +24,7 @@ export async function POST(request) {
   }
 }
 
-// ------------------ GET (Read all) ------------------
+// ------------------ GET ------------------
 export async function GET() {
   let connection;
   try {
@@ -49,7 +38,7 @@ export async function GET() {
   }
 }
 
-// ------------------ PUT (Update) ------------------
+// ------------------ PUT ------------------
 export async function PUT(request) {
   let connection;
   try {
@@ -65,7 +54,6 @@ export async function PUT(request) {
     const values = [name, address, city, state, contact, image || null, email_id, id];
 
     const [result] = await connection.execute(query, values);
-
     return NextResponse.json({ message: "School updated", affected: result.affectedRows });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -84,7 +72,6 @@ export async function DELETE(request) {
 
     const query = `DELETE FROM schools WHERE id=?`;
     const [result] = await connection.execute(query, [id]);
-
     return NextResponse.json({ message: "School deleted", affected: result.affectedRows });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
