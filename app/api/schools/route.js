@@ -1,24 +1,54 @@
-let schools = []; // temporary storage
+// app/api/schools/route.js
+import { NextResponse } from "next/server";
 
+let dummySchools = [
+  {
+    id: 1,
+    name: "Green Valley School",
+    address: "123 Main Street",
+    city: "Chennai",
+    state: "Tamil Nadu",
+    contact: "9876543210",
+    image: null,
+    email: "contact@gvs.com",
+  },
+  {
+    id: 2,
+    name: "Sunrise Public School",
+    address: "456 Park Avenue",
+    city: "Bangalore",
+    state: "Karnataka",
+    contact: "9123456789",
+    image: null,
+    email: "info@sunrise.edu",
+  },
+];
+
+// GET (list schools - always works)
 export async function GET() {
-  return Response.json(schools);
+  return NextResponse.json(dummySchools, { status: 200 });
 }
 
-export async function POST(req) {
-  const data = await req.json();
-  const newSchool = { id: Date.now(), ...data };
-  schools.push(newSchool);
-  return Response.json({ message: "School added", school: newSchool });
+// POST (just pushes to dummy array)
+export async function POST(request) {
+  const body = await request.json();
+  const newSchool = { id: Date.now(), ...body };
+  dummySchools.push(newSchool);
+  return NextResponse.json({ message: "School added", school: newSchool }, { status: 201 });
 }
 
-export async function PUT(req) {
-  const data = await req.json();
-  schools = schools.map((s) => (s.id === data.id ? { ...s, ...data } : s));
-  return Response.json({ message: "School updated" });
+// PUT (update dummy)
+export async function PUT(request) {
+  const body = await request.json();
+  dummySchools = dummySchools.map((s) =>
+    s.id === body.id ? { ...s, ...body } : s
+  );
+  return NextResponse.json({ message: "School updated" }, { status: 200 });
 }
 
-export async function DELETE(req) {
-  const { id } = await req.json();
-  schools = schools.filter((s) => s.id !== id);
-  return Response.json({ message: "School deleted" });
+// DELETE (remove dummy)
+export async function DELETE(request) {
+  const body = await request.json();
+  dummySchools = dummySchools.filter((s) => s.id !== body.id);
+  return NextResponse.json({ message: "School deleted" }, { status: 200 });
 }
