@@ -10,21 +10,13 @@ export async function POST(request) {
   try {
     connection = await connect();
     const body = await request.json();
-    const { name, address, city, state, contact, image, email_id } = body;
+    const { name, address, city, state, contact, image, email } = body; // ✅ lowercase
 
     const sql = `
       INSERT INTO schools (name, address, city, State, Contact, image, email)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
-    const params = [
-      name,
-      address,
-      city,
-      state, // maps to State
-      contact, // maps to Contact
-      image || null,
-      email_id, // maps to email
-    ];
+    const params = [name, address, city, state, contact, image || null, email];
 
     const [result] = await connection.execute(sql, params);
     return NextResponse.json(
@@ -68,23 +60,14 @@ export async function PUT(request) {
   try {
     connection = await connect();
     const body = await request.json();
-    const { id, name, address, city, state, contact, image, email_id } = body;
+    const { id, name, address, city, state, contact, image, email } = body; // ✅ lowercase
 
     const sql = `
       UPDATE schools
       SET name=?, address=?, city=?, State=?, Contact=?, image=?, email=?
       WHERE id=?
     `;
-    const params = [
-      name,
-      address,
-      city,
-      state,
-      contact,
-      image || null,
-      email_id,
-      id,
-    ];
+    const params = [name, address, city, state, contact, image || null, email, id];
 
     const [result] = await connection.execute(sql, params);
     return NextResponse.json(
