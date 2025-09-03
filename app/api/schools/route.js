@@ -1,6 +1,6 @@
 // app/api/schools/route.js
 import { NextResponse } from 'next/server';
-import connect from '@/lib/db';
+import { connect } from '@/lib/db';   // ✅ FIXED
 
 export const runtime = 'nodejs';
 
