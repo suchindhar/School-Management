@@ -1,130 +1,134 @@
-// app/api/schools/route.js
 import { NextResponse } from "next/server";
 import { connect } from "@/lib/db";
 
-export const runtime = "nodejs";
+// ✅ Helper: replace undefined with null
+function safe(val) {
+  return val === undefined ? null : val;
+}
 
-// ------------------ ADD (POST) ------------------
-export async function POST(request) {
-  let connection;
+// =======================
+// POST → Add new school
+// =======================
+export async function POST(req) {
   try {
-    connection = await connect();
-    const body = await request.json();
-    const { name, address, city, state, contact, image, email } = body;
+    const { name, address, city, state, contact, email_id, image } =
+      await req.json();
 
-    const sql = `
-      INSERT INTO schools (name, address, city, State, Contact, image, email)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
-    const params = [
+    console.log("POST /api/schools → data received:", {
       name,
       address,
       city,
       state,
       contact,
-      image || null,
-      email,
-    ];
+      email_id,
+      image,
+    });
 
-    const [result] = await connection.execute(sql, params);
+    const conn = await connect();
+
+    const [result] = await conn.execute(
+      "INSERT INTO schools (name, address, city, state, contact, email_id, image) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [
+        safe(name),
+        safe(address),
+        safe(city),
+        safe(state),
+        safe(contact),
+        safe(email_id),
+        safe(image),
+      ]
+    );
+
     return NextResponse.json(
-      { message: "School added", id: result.insertId },
+      { message: "School added successfully", id: result.insertId },
       { status: 201 }
     );
   } catch (err) {
     console.error("DB Error (POST):", err);
-    return NextResponse.json(
-      { error: err.message || "Internal Server Error" },
-      { status: 500 }
-    );
-  } finally {
-    if (connection) await connection.end();
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-// ------------------ LIST (GET) ------------------
+// =======================
+// GET → Fetch all schools
+// =======================
 export async function GET() {
-  let connection;
   try {
-    connection = await connect();
-    const [rows] = await connection.execute(
-      "SELECT * FROM schools ORDER BY id DESC"
-    );
-    return NextResponse.json(rows, { status: 200 });
+    const conn = await connect();
+    const [rows] = await conn.execute("SELECT * FROM schools");
+    return NextResponse.json(rows);
   } catch (err) {
     console.error("DB Error (GET):", err);
-    return NextResponse.json(
-      { error: err.message || "Internal Server Error" },
-      { status: 500 }
-    );
-  } finally {
-    if (connection) await connection.end();
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-// ------------------ UPDATE (PUT) ------------------
-export async function PUT(request) {
-  let connection;
+// =======================
+// PUT → Update school
+// =======================
+export async function PUT(req) {
   try {
-    connection = await connect();
-    const body = await request.json();
-    const { id, name, address, city, state, contact, image, email } = body;
+    const { id, name, address, city, state, contact, email_id, image } =
+      await req.json();
 
-    const sql = `
-      UPDATE schools
-      SET name=?, address=?, city=?, State=?, Contact=?, image=?, email=?
-      WHERE id=?
-    `;
-    const params = [
+    console.log("PUT /api/schools → data received:", {
+      id,
       name,
       address,
       city,
       state,
       contact,
-      image || null,
-      email,
-      id,
-    ];
+      email_id,
+      image,
+    });
 
-    const [result] = await connection.execute(sql, params);
-    return NextResponse.json(
-      { message: "School updated", affected: result.affectedRows },
-      { status: 200 }
+    if (!id) {
+      return NextResponse.json({ error: "Missing school id" }, { status: 400 });
+    }
+
+    const conn = await connect();
+
+    await conn.execute(
+      "UPDATE schools SET name=?, address=?, city=?, state=?, contact=?, email_id=?, image=? WHERE id=?",
+      [
+        safe(name),
+        safe(address),
+        safe(city),
+        safe(state),
+        safe(contact),
+        safe(email_id),
+        safe(image),
+        id,
+      ]
     );
+
+    return NextResponse.json({ message: "School updated successfully" });
   } catch (err) {
     console.error("DB Error (PUT):", err);
-    return NextResponse.json(
-      { error: err.message || "Internal Server Error" },
-      { status: 500 }
-    );
-  } finally {
-    if (connection) await connection.end();
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-// ------------------ DELETE ------------------
-export async function DELETE(request) {
-  let connection;
+// =======================
+// DELETE → Remove school
+// =======================
+export async function DELETE(req) {
   try {
-    connection = await connect();
-    const body = await request.json();
-    const { id } = body;
+    const { id } = await req.json();
 
-    const [result] = await connection.execute(
-      "DELETE FROM schools WHERE id=?",
-      [id]
-    );
-    return NextResponse.json(
-      { message: "School deleted", affected: result.affectedRows },
-      { status: 200 }
-    );
+    console.log("DELETE /api/schools → id received:", id);
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing school id" }, { status: 400 });
+    }
+
+    const conn = await connect();
+
+    await conn.execute("DELETE FROM schools WHERE id=?", [id]);
+
+    return NextResponse.json({ message: "School deleted successfully" });
   } catch (err) {
     console.error("DB Error (DELETE):", err);
-    return NextResponse.json(
-      { error: err.message || "Internal Server Error" },
-      { status: 500 }
-    );
-  } finally {
-    if (connection) await connection.end();
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
