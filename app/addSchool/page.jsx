@@ -18,7 +18,7 @@ export default function AddSchool() {
     state: "",
     contact: "",
     email_id: "",
-    image: null,
+    image: "", // save only filename
   });
 
   const [preview, setPreview] = useState(null);
@@ -31,7 +31,7 @@ export default function AddSchool() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setForm({ ...form, image: file });
+      setForm({ ...form, image: file.name }); // just store name for DB
       setPreview(URL.createObjectURL(file));
     }
   };
@@ -44,14 +44,10 @@ export default function AddSchool() {
     e.preventDefault();
     console.log("Form submitted:", form);
 
-    const formData = new FormData();
-    Object.keys(form).forEach((key) => {
-      formData.append(key, form[key]);
-    });
-
     const res = await fetch("/api/schools", {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
     });
 
     const data = await res.json();
@@ -59,9 +55,9 @@ export default function AddSchool() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 px-4">
-      <div className="w-full max-w-2xl bg-white/10 backdrop-blur-md shadow-xl rounded-2xl p-8 border border-white/20">
-        <h2 className="text-4xl font-extrabold text-center text-white mb-8 flex items-center justify-center gap-3">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 px-4">
+      <div className="w-full max-w-2xl bg-white/10 backdrop-blur-xl shadow-2xl rounded-2xl p-10 border border-white/20">
+        <h2 className="text-4xl font-extrabold text-center text-white mb-8 flex items-center justify-center gap-3 drop-shadow-lg">
           <FaSchool className="text-indigo-300" /> Add School
         </h2>
 
@@ -74,9 +70,9 @@ export default function AddSchool() {
             <input
               type="text"
               name="name"
-              placeholder="Enter the school name"
               value={form.name}
               onChange={handleChange}
+              placeholder="Enter school name"
               className="w-full mt-2 px-4 py-3 bg-black/40 text-white rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none placeholder-gray-400"
               required
             />
@@ -90,9 +86,9 @@ export default function AddSchool() {
             <input
               type="text"
               name="address"
-              placeholder="Enter the full address"
               value={form.address}
               onChange={handleChange}
+              placeholder="Enter full address"
               className="w-full mt-2 px-4 py-3 bg-black/40 text-white rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none placeholder-gray-400"
               required
             />
@@ -107,9 +103,9 @@ export default function AddSchool() {
               <input
                 type="text"
                 name="city"
-                placeholder="Enter city"
                 value={form.city}
                 onChange={handleChange}
+                placeholder="Enter city"
                 className="w-full mt-2 px-4 py-3 bg-black/40 text-white rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none placeholder-gray-400"
                 required
               />
@@ -121,9 +117,9 @@ export default function AddSchool() {
               <input
                 type="text"
                 name="state"
-                placeholder="Enter state"
                 value={form.state}
                 onChange={handleChange}
+                placeholder="Enter state"
                 className="w-full mt-2 px-4 py-3 bg-black/40 text-white rounded-lg focus:ring-2 focus:ring-yellow-400 focus:outline-none placeholder-gray-400"
                 required
               />
@@ -139,9 +135,9 @@ export default function AddSchool() {
               <input
                 type="number"
                 name="contact"
-                placeholder="Enter contact number"
                 value={form.contact}
                 onChange={handleChange}
+                placeholder="Enter contact number"
                 className="w-full mt-2 px-4 py-3 bg-black/40 text-white rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none placeholder-gray-400"
                 required
               />
@@ -153,9 +149,9 @@ export default function AddSchool() {
               <input
                 type="email"
                 name="email_id"
-                placeholder="Enter email address"
                 value={form.email_id}
                 onChange={handleChange}
+                placeholder="Enter email"
                 className="w-full mt-2 px-4 py-3 bg-black/40 text-white rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none placeholder-gray-400"
                 required
               />
@@ -168,7 +164,6 @@ export default function AddSchool() {
               <FaImage className="text-purple-300" /> School Image
             </label>
 
-            {/* Hidden input */}
             <input
               type="file"
               accept="image/*"
@@ -177,16 +172,14 @@ export default function AddSchool() {
               className="hidden"
             />
 
-            {/* Custom Upload Button */}
             <button
               type="button"
               onClick={handleUploadClick}
-              className="mt-3 px-6 py-2 bg-purple-500 hover:bg-purple-600 rounded-lg shadow-md transition"
+              className="mt-3 px-6 py-2 bg-purple-500 hover:bg-purple-600 rounded-lg shadow-md transition hover:shadow-purple-500/50"
             >
               Upload Image
             </button>
 
-            {/* Preview */}
             {preview && (
               <img
                 src={preview}
@@ -199,9 +192,9 @@ export default function AddSchool() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 mt-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg shadow-lg text-lg font-semibold hover:scale-105 transform transition duration-300"
+            className="w-full py-3 mt-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg shadow-lg text-lg font-semibold hover:scale-105 transform transition duration-300 hover:shadow-[0_0_20px_rgba(236,72,153,0.7)]"
           >
-            Add School
+            ➕ Add School
           </button>
         </form>
       </div>
