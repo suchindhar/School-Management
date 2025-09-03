@@ -1,7 +1,10 @@
-import { NextResponse } from "next/server";
-import { connect } from "@/lib/db";
+// app/api/schools/route.js
+import { NextResponse } from 'next/server';
+import connect from '@/lib/db';
 
-// ------------------ ADD ------------------
+export const runtime = 'nodejs';
+
+// ------------------ ADD (POST) ------------------
 export async function POST(request) {
   let connection;
   try {
@@ -9,36 +12,36 @@ export async function POST(request) {
     const body = await request.json();
     const { name, address, city, state, contact, image, email_id } = body;
 
-    const query = `
+    const sql = `
       INSERT INTO schools (name, address, city, state, contact, image, email_id)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
-    const values = [name, address, city, state, contact, image || null, email_id];
+    const params = [name, address, city, state, String(contact), image || null, email_id];
 
-    const [result] = await connection.execute(query, values);
-    return NextResponse.json({ message: "School added", id: result.insertId }, { status: 201 });
+    const [result] = await connection.execute(sql, params);
+    return NextResponse.json({ message: 'School added', id: result.insertId }, { status: 201 });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Internal Server Error' }, { status: 500 });
   } finally {
     if (connection) await connection.end();
   }
 }
 
-// ------------------ GET ------------------
+// ------------------ LIST (GET) ------------------
 export async function GET() {
   let connection;
   try {
     connection = await connect();
-    const [rows] = await connection.execute("SELECT * FROM schools ORDER BY id DESC");
-    return NextResponse.json(rows);
+    const [rows] = await connection.execute('SELECT * FROM schools ORDER BY id DESC');
+    return NextResponse.json(rows, { status: 200 });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Internal Server Error' }, { status: 500 });
   } finally {
     if (connection) await connection.end();
   }
 }
 
-// ------------------ PUT ------------------
+// ------------------ UPDATE (PUT) ------------------
 export async function PUT(request) {
   let connection;
   try {
@@ -46,17 +49,17 @@ export async function PUT(request) {
     const body = await request.json();
     const { id, name, address, city, state, contact, image, email_id } = body;
 
-    const query = `
-      UPDATE schools 
+    const sql = `
+      UPDATE schools
       SET name=?, address=?, city=?, state=?, contact=?, image=?, email_id=?
       WHERE id=?
     `;
-    const values = [name, address, city, state, contact, image || null, email_id, id];
+    const params = [name, address, city, state, String(contact), image || null, email_id, id];
 
-    const [result] = await connection.execute(query, values);
-    return NextResponse.json({ message: "School updated", affected: result.affectedRows });
+    const [result] = await connection.execute(sql, params);
+    return NextResponse.json({ message: 'School updated', affected: result.affectedRows }, { status: 200 });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Internal Server Error' }, { status: 500 });
   } finally {
     if (connection) await connection.end();
   }
@@ -70,11 +73,10 @@ export async function DELETE(request) {
     const body = await request.json();
     const { id } = body;
 
-    const query = `DELETE FROM schools WHERE id=?`;
-    const [result] = await connection.execute(query, [id]);
-    return NextResponse.json({ message: "School deleted", affected: result.affectedRows });
+    const [result] = await connection.execute('DELETE FROM schools WHERE id=?', [id]);
+    return NextResponse.json({ message: 'School deleted', affected: result.affectedRows }, { status: 200 });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Internal Server Error' }, { status: 500 });
   } finally {
     if (connection) await connection.end();
   }
